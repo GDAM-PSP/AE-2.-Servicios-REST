@@ -46,7 +46,7 @@ public class ClienteRestApplication implements CommandLineRunner {
 			System.out.println("");
 			System.out.println("ESTA ES LA SALIDA:   " + opcion);
 
-			// DAR DE ALTA UN NUEVO LIBRO
+			// DAR DE ALTA UN NUEVO LIBRO s
 			switch (opcion) {
 			case 1:
 				libroService.altaLibro(libro);
