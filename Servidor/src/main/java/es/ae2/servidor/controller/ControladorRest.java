@@ -1,4 +1,4 @@
-package es.ae2.controller;
+package es.ae2.servidor.controller;
 
 
 import java.util.List;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.ae2.classes.Libro;
-import es.ae2.dao.LibroDao;
+import es.ae2.servidor.dao.LibroDao;
+import es.ae2.servidor.entidad.Libro;
 
 
 @RestController

@@ -1,4 +1,4 @@
-package com.example.modelo.negocio;
+package es.ae2.cliente.negocio;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.modelo.entidad.Libro;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+
+import es.ae2.cliente.entidad.Libro;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,25 +74,13 @@ public class LibroService {
 		System.out.println(l.toString());
 		System.out.println("");
 		System.out.println("¿Que desea Modificar?");
-		System.out.println("1.- ID");
-		System.out.println("2.- EDITORIAL");
-		System.out.println("3.- TITULO");
-		System.out.println("4.- NOTA");
+		System.out.println("1.- EDITORIAL");
+		System.out.println("2.- TITULO");
+		System.out.println("3.- NOTA");
 		System.out.println("0.- NADA");
 		opcion = sc.nextInt();
 		switch (opcion) {
 		case 1:
-			System.out.print("Ingrese el nuevo ID: ");
-			opcion = sc.nextInt();
-			if (opcion != l.getId()) {
-				lmodificado.setId(opcion);
-				System.out.println("                         ");
-				break;
-			} else {
-				System.out.println("Ya existe un libro con ese ID Selecciona Otro");
-				break;
-			}
-		case 2:
 			System.out.print("Ingrese la nueva editorial: ");
 			texto = sc.next();
 			l.setEditorial(texto);
@@ -99,7 +88,7 @@ public class LibroService {
 			System.out.println("***** EDITORIAL MODIFICADA ****");
 			System.out.println("                         ");
 			break;
-		case 3:
+		case 2:
 			System.out.print("Ingrese el nuevo título: ");
 			String viejotitulo = l.getTitulo();
 			texto = sc.next();
@@ -113,13 +102,14 @@ public class LibroService {
 				System.out.println("Ya existe un libro con ese titulo, vuelva a intentarlo");
 				break;
 			}
-		case 4:
+		case 3:
 			System.out.print("Ingrese la nueva nota: ");
 			opcion_aux = sc.nextFloat();
 			l.setNota(opcion_aux);
 			break;
+			
 		default:
-			System.out.println("Error: Opción no válida.");
+			System.out.println("Volviendo al menu principal.");
 			break;
 		}
 		try {
@@ -129,7 +119,7 @@ public class LibroService {
 
 			return true;
 		} catch (HttpClientErrorException e) {
-			System.out.println("No se ha podido modificar el libro por ID");
+			System.out.println("No se ha podido modificar el libro.");
 			System.out.println(e.getStatusCode());
 			return false;
 		}
@@ -142,8 +132,7 @@ public class LibroService {
 			System.out.println("Eliminado el libro con ID: " + id);
 			return true;
 		} catch (HttpClientErrorException e) {
-			System.out.println("No se ha podido ELIMINAR el libro por ID");
-			System.out.println(e.getStatusCode());
+			System.out.println(e.getStatusCode() + " - No se ha encontrado el libro a eliminar.");
 			return false;
 		}
 	}
@@ -152,6 +141,16 @@ public class LibroService {
 
 	public boolean altaLibro(Libro libro) {
 		try {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Introduzca el titulo:");
+			String titulo = sc.next();
+			libro.setTitulo(titulo);
+			System.out.println("Introduzca la editorial:");
+			String editorial = sc.next();
+			libro.setEditorial(editorial);
+			System.out.println("Introduzca la nota (0-10):");
+			Double nota = sc.nextDouble();
+			libro.setNota(nota);
 			ResponseEntity<Libro> lib = restTemplate.postForEntity(URL, libro, Libro.class);
 			System.out.println("El objeto se ha dado de alta " + lib.getStatusCode());
 			return true; // DEVOLVEMOS EL ARRAY COMO LISTA

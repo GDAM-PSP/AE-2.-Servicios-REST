@@ -1,9 +1,9 @@
-package es.ae2.dao;
+package es.ae2.servidor.dao;
 
 import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
-import es.ae2.classes.Libro;
+import es.ae2.servidor.entidad.Libro;
 
 @Component
 public class LibroDao {
