@@ -1,21 +1,17 @@
 package es.ae2.cliente.negocio;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
-
 import es.ae2.cliente.entidad.Libro;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 @Service // Implementa servicio en contexto Spring
 public class LibroService {
@@ -69,7 +65,6 @@ public class LibroService {
 		float opcion_aux;
 		Scanner sc = new Scanner(System.in);
 		l = ObtenerporId(id);
-		Libro lmodificado = l;
 		System.out.println("");
 		System.out.println(l.toString());
 		System.out.println("");
@@ -112,6 +107,7 @@ public class LibroService {
 			System.out.println("Volviendo al menu principal.");
 			break;
 		}
+				
 		try {
 			restTemplate.put(URL + l.getId(), l, Libro.class); // LE SOLICITAMOS EL ID POR URL CON EL OBJETO
 																// // // //
