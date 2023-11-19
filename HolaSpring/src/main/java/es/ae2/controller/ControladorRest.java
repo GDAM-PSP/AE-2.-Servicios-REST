@@ -80,8 +80,7 @@ public class ControladorRest {
 	@PutMapping(path="libros/{id}", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Libro> putLibros(@RequestBody Libro bodyLibro, @PathVariable("id") int id){
 		bodyLibro.setId(id);
-		Libro updateLibro = daoLibro.update(bodyLibro, id);
-		
+		Libro updateLibro = daoLibro.update(bodyLibro, id);	
 		if(updateLibro != null) {
 			return new ResponseEntity<Libro>(daoLibro.get(id), HttpStatus.OK);
 		} else {
@@ -94,8 +93,8 @@ public class ControladorRest {
 	 * @param id Identificador del libro a eliminar
 	 * @return 200 si se elimina, 404 si no existe
 	 */
-	@DeleteMapping(path="libros/{id}", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Libro> DeleteLibros(@PathVariable("id") int id){
+	@DeleteMapping(path="libros/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Libro> deleteLibros(@PathVariable("id") int id){
 		Boolean eliminacionLibro = daoLibro.delete(id);
 		
 		if(eliminacionLibro) {
