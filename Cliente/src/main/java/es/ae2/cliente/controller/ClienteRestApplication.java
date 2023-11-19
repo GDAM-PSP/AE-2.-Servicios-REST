@@ -1,7 +1,5 @@
-package com.example;
+package es.ae2.cliente.controller;
 
-import java.lang.ref.Cleaner;
-import java.security.Provider.Service;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,10 +12,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.modelo.entidad.Libro;
-import com.example.modelo.negocio.LibroService;
+import es.ae2.cliente.entidad.Libro;
+import es.ae2.cliente.negocio.LibroService;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={
+"es.ae2.cliente"})
 public class ClienteRestApplication implements CommandLineRunner {
 	@Autowired // UTILIZA EL OBJETO DE JAVA Y LO INTRODUCE EN EL CONTEXTO SPRING
 	private ApplicationContext contextoSpring;
@@ -37,6 +36,7 @@ public class ClienteRestApplication implements CommandLineRunner {
 
 	public void run(String... args) throws Exception {
 		int opcion;
+		Boolean respuesta;
 		int id;
 		Libro libro = new Libro();
 		Scanner idsc = new Scanner(System.in);
@@ -44,38 +44,51 @@ public class ClienteRestApplication implements CommandLineRunner {
 			menu();
 			opcion = opcionMenu();
 			System.out.println("");
-			System.out.println("ESTA ES LA SALIDA:   " + opcion);
+			System.out.println("Opción seleccionada:  " + opcion);
 
-			// DAR DE ALTA UN NUEVO LIBRO s
+			// DAR DE ALTA UN NUEVO LIBRO
 			switch (opcion) {
 			case 1:
-				libroService.altaLibro(libro);
-				System.out.println("DADO DE ALTA EL LIBRO: ");
-				System.out.println("     " + libro.toString() + "                  ");
+				respuesta = libroService.altaLibro(libro);
+				if (respuesta) {
+					System.out.println("DADO DE ALTA EL LIBRO: " + libro);
+				} else {
+					System.out.println("NO SE HA PODIDO DAR DE ALTA EL LIBRO: " + libro);
+				}
 				System.out.println("                                               ");
 				System.out.println("                                               ");
 				break;
 
 			// DAR DE BAJA UN LIBRO POR ID
 			case 2:
-				System.out.println("Introduzca ID ");
+				System.out.println("Introduzca ID: ");
 				id = idsc.nextInt();
-				libroService.borrarLibroId(id);
-				System.out.println("LIBRO CON ID " + id + " HA SIDO BORRADO");
+				respuesta = libroService.borrarLibroId(id);
+				if (respuesta) {
+					System.out.println("LIBRO CON ID " + id + " HA SIDO BORRADO");
+				} else {
+					System.out.println("NO SE HA PODIDO BORRAR EL LIBRO CON ID " + id);
+				}
 				System.out.println("                                               ");
 				System.out.println("                                               ");
 				break;
 
 			// MODIFICAR UN LIBRO POR ID
 			case 3:
-				System.out.println("Introduzca ID ");
+				System.out.println("Introduzca el ID: ");
 				id = idsc.nextInt();
-				libroService.modificarLibroId(libro, id);
+				//Obtenemos el libro a modificar para mostrar los valores originales
+				libro = libroService.ObtenerporId(id);
+				if (libro != null) {
+					libroService.modificarLibroId(libro, id);
+				} else {
+					System.out.println("El libro no existe.");
+				}
 				break;
 
 			// OBTENER UN LIBRO POR ID
 			case 4:
-				System.out.println("Introduzca ID ");
+				System.out.println("Introduzca ID: ");
 				id = idsc.nextInt();
 				libro = libroService.ObtenerporId(id);
 				System.out.println(libro.toString());
@@ -93,12 +106,11 @@ public class ClienteRestApplication implements CommandLineRunner {
 					System.out.println("*  " + "[" + s.getTitulo() + "]");
 					System.out.println(s.toString());
 					System.out.println("           ");
-					System.out.println("           ");
-					System.out.println("           ");
 				}
 				break;
 			}
 		} while (opcion != 0);
+		idsc.close();
 		pararCliente();
 	}
 
@@ -124,7 +136,6 @@ public class ClienteRestApplication implements CommandLineRunner {
 	}
 
 	private int opcionMenu() {
-		// TODO Auto-generated method stub
 		int opcion = 0;
 		Scanner sc = new Scanner(System.in);
 		try {
